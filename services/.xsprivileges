@@ -1,0 +1,6 @@
+{
+ "privileges": [
+  {"name": "Admin", "description": "Admin"},
+  {"name": "View", "description": "View"}
+ ]
+}

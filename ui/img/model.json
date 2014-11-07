@@ -1,0 +1,11 @@
+{
+	"icon": {
+		"sap": "img/SAPLogo.png",
+		"academy": "img/academyLogo.png",
+		"overview": "img/overview.png",
+		"segmentation": "img/segmentation.png",
+		"settings": "img/settings.png",
+		"tracking": "img/tracking.png",
+		"about": "img/about.png"
+	}
+}

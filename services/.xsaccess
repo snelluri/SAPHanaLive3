@@ -1,0 +1,6 @@
+{
+ "exposed": true,
+ "authentication": [{"method": "Form"}],
+ "authorization": ["DEV01.live3::Admin", "DEV01.live3::View"],
+ "prevent_xsrf": true
+}

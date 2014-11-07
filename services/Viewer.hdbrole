@@ -1,0 +1,7 @@
+// USAGE: CALL GRANT_ACTIVATED_ROLE('DEV01.live3::Viewer','USER');
+role DEV01.live3::Viewer {
+ catalog schema "DEV01": SELECT;
+ catalog schema "_SYS_BI": SELECT;
+ catalog schema "_SYS_BIC": SELECT;
+ application privilege: DEV01.live3::View;
+}

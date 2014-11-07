@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" schemaVersion="2.3" id="TWEETS_TIME_DIM" applyPrivilegeType="ANALYTIC_PRIVILEGE" checkAnalyticPrivileges="true" defaultClient="$$client$$" defaultLanguage="$$language$$" visibility="internal" calculationScenarioType="SCRIPT_BASED" dataCategory="DEFAULT" enforceSqlExecution="false" executionSemantic="UNDEFINED" scriptParametersCaseSensitive="true">
+  <origin system="DB1:HANA:01:DEV01"/>
+  <descriptions defaultDescription="TWEETS_TIME_DIM"/>
+  <metadata activatedAt="2014-11-06 18:45:31.0"/>
+  <localVariables/>
+  <variableMappings/>
+  <dataSources/>
+  <calculationViews>
+    <calculationView xsi:type="Calculation:SqlScriptView" id="Script_View">
+      <viewAttributes>
+        <viewAttribute datatype="VARCHAR" id="id" length="45"/>
+        <viewAttribute datatype="VARCHAR" id="BASKETHOUR" length="20"/>
+        <viewAttribute datatype="VARCHAR" id="BASKET15MIN" length="20"/>
+        <viewAttribute datatype="VARCHAR" id="BASKET30MIN" length="20"/>
+      </viewAttributes>
+      <calculatedViewAttributes/>
+      <definition>/********* Begin Procedure Script ************/ 
+ BEGIN 
+ 	 var_out = 
+SELECT 
+&quot;id&quot;,
+month(&quot;created&quot;)||'/'||dayofmonth(&quot;created&quot;)||' '||right('0'||hour(&quot;created&quot;),2) AS BASKETHOUR,
+month(&quot;created&quot;)||'/'||dayofmonth(&quot;created&quot;)||' '||right('0'||hour(&quot;created&quot;),2)||':'||right('0'||floor(minute(&quot;created&quot;)/15)*15,2) AS BASKET15MIN,
+month(&quot;created&quot;)||'/'||dayofmonth(&quot;created&quot;)||' '||right('0'||hour(&quot;created&quot;),2)||':'||right('0'||floor(minute(&quot;created&quot;)/30)*30,2) AS BASKET30MIN 
+FROM &quot;DEV01&quot;.&quot;Tweets&quot;
+order by 1;
+
+END 
+/********* End Procedure Script ************/</definition>
+    </calculationView>
+  </calculationViews>
+  <logicalModel id="Script_View">
+    <attributes>
+      <attribute id="id" order="1">
+        <descriptions defaultDescription="id"/>
+        <keyMapping columnObjectName="Script_View" columnName="id"/>
+      </attribute>
+      <attribute id="BASKETHOUR" order="2">
+        <descriptions defaultDescription="BASKETHOUR"/>
+        <keyMapping columnObjectName="Script_View" columnName="BASKETHOUR"/>
+      </attribute>
+      <attribute id="BASKET15MIN" order="3">
+        <descriptions defaultDescription="BASKET15MIN"/>
+        <keyMapping columnObjectName="Script_View" columnName="BASKET15MIN"/>
+      </attribute>
+      <attribute id="BASKET30MIN" order="4">
+        <descriptions defaultDescription="BASKET30MIN"/>
+        <keyMapping columnObjectName="Script_View" columnName="BASKET30MIN"/>
+      </attribute>
+    </attributes>
+    <calculatedAttributes/>
+    <privateDataFoundation>
+      <tableProxies/>
+      <joins/>
+      <layout>
+        <shapes/>
+      </layout>
+    </privateDataFoundation>
+    <baseMeasures/>
+    <calculatedMeasures/>
+    <restrictedMeasures/>
+    <localDimensions/>
+  </logicalModel>
+  <layout>
+    <shapes>
+      <shape modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+        <upperLeftCorner x="40" y="85"/>
+      </shape>
+    </shapes>
+  </layout>
+</Calculation:scenario>

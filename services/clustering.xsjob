@@ -1,0 +1,9 @@
+{
+    "description": "Perform clustering",
+    "action": "DEV01.live3:clustering.xsjs::clustering",
+    "schedules": [ {
+        "description": "Perform clustering every minute", 
+        "xscron": "* * * * * */1 0",
+        "parameter": { } 
+        } ]
+}

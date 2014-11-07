@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:AccessControl="http://www.sap.com/ndb/SQLCoreModelAccessControl.ecore" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" schemaVersion="2.3" id="TWEETS_ANALYSIS" applyPrivilegeType="NONE" checkAnalyticPrivileges="false" defaultClient="$$client$$" defaultLanguage="$$language$$" visibility="reportingEnabled" calculationScenarioType="TREE_BASED" dataCategory="CUBE" enforceSqlExecution="false" executionSemantic="UNDEFINED" outputViewType="Aggregation">
+  <origin system="DB1:HANA:01:DEV01"/>
+  <descriptions defaultDescription="TWEETS_ANALYSIS"/>
+  <metadata activatedAt="2014-11-06 18:32:13.0"/>
+  <localVariables/>
+  <variableMappings/>
+  <dataSources>
+    <DataSource id="$TA_tweets" type="DATA_BASE_TABLE">
+      <viewAttributes allViewAttributes="true"/>
+      <columnObject schemaName="DEV01" columnObjectName="$TA_tweets"/>
+    </DataSource>
+    <DataSource id="TWEETS_TIME_DIM" type="CALCULATION_VIEW">
+      <viewAttributes allViewAttributes="true"/>
+      <resourceUri>/DEV01/calculationviews/TWEETS_TIME_DIM</resourceUri>
+    </DataSource>
+  </dataSources>
+  <calculationViews>
+    <calculationView xsi:type="Calculation:AggregationView" id="Aggregation_1">
+      <viewAttributes>
+        <viewAttribute id="id"/>
+        <viewAttribute id="TA_TYPE">
+          <filter xsi:type="AccessControl:ListValueFilter" operator="IN" including="false">
+            <operands value="AMBIGUOUS_PROFANITY"/>
+            <operands value="UNAMBIGUOUS_PROFANITY"/>
+          </filter>
+        </viewAttribute>
+        <viewAttribute id="TA_TOKEN"/>
+      </viewAttributes>
+      <calculatedViewAttributes/>
+      <input node="#$TA_tweets">
+        <mapping xsi:type="Calculation:AttributeMapping" target="TA_TYPE" source="TA_TYPE"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="TA_TOKEN" source="TA_TOKEN"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="id" source="id"/>
+      </input>
+    </calculationView>
+    <calculationView xsi:type="Calculation:JoinView" id="Join_1" joinType="inner">
+      <viewAttributes>
+        <viewAttribute id="id"/>
+        <viewAttribute id="TA_TYPE"/>
+        <viewAttribute id="TA_TOKEN"/>
+        <viewAttribute id="BASKETHOUR"/>
+        <viewAttribute id="BASKET15MIN"/>
+        <viewAttribute id="BASKET30MIN"/>
+      </viewAttributes>
+      <calculatedViewAttributes/>
+      <input node="#Aggregation_1">
+        <mapping xsi:type="Calculation:AttributeMapping" target="id" source="id"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="TA_TYPE" source="TA_TYPE"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="TA_TOKEN" source="TA_TOKEN"/>
+      </input>
+      <input node="#TWEETS_TIME_DIM">
+        <mapping xsi:type="Calculation:AttributeMapping" target="BASKETHOUR" source="BASKETHOUR"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="BASKET15MIN" source="BASKET15MIN"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="BASKET30MIN" source="BASKET30MIN"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="id" source="id"/>
+      </input>
+      <joinAttribute name="id"/>
+    </calculationView>
+  </calculationViews>
+  <logicalModel id="Join_1">
+    <attributes>
+      <attribute id="BasketHour" order="3" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="BasketHour"/>
+        <keyMapping columnObjectName="Join_1" columnName="BASKETHOUR"/>
+      </attribute>
+      <attribute id="Basket15Min" order="4" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="Basket15Min"/>
+        <keyMapping columnObjectName="Join_1" columnName="BASKET15MIN"/>
+      </attribute>
+      <attribute id="Basket30Min" order="5" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="Basket30Min"/>
+        <keyMapping columnObjectName="Join_1" columnName="BASKET30MIN"/>
+      </attribute>
+      <attribute id="id" hidden="true" order="7" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="id"/>
+        <keyMapping columnObjectName="Join_1" columnName="id"/>
+      </attribute>
+      <attribute id="Token_Old" hidden="true" order="8" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="Token_Old"/>
+        <keyMapping columnObjectName="Join_1" columnName="TA_TOKEN"/>
+      </attribute>
+      <attribute id="Type_Old" hidden="true" order="9" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="Type_Old"/>
+        <keyMapping columnObjectName="Join_1" columnName="TA_TYPE"/>
+      </attribute>
+    </attributes>
+    <calculatedAttributes>
+      <calculatedAttribute id="Type" hidden="false" order="1" semanticType="empty" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="Type"/>
+        <keyCalculation datatype="VARCHAR" length="50" scale="0">
+          <formula>upper(&quot;Type_Old&quot;)</formula>
+        </keyCalculation>
+      </calculatedAttribute>
+      <calculatedAttribute id="Token" hidden="false" order="2" semanticType="empty" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="Token"/>
+        <keyCalculation datatype="VARCHAR" length="100" scale="0">
+          <formula>upper(&quot;Token_Old&quot;)</formula>
+        </keyCalculation>
+      </calculatedAttribute>
+    </calculatedAttributes>
+    <privateDataFoundation>
+      <tableProxies/>
+      <joins/>
+      <layout>
+        <shapes/>
+      </layout>
+    </privateDataFoundation>
+    <baseMeasures/>
+    <calculatedMeasures>
+      <measure id="TweetCount" hidden="false" order="6" aggregationType="sum" measureType="simple" calculatedMeasureType="counter" datatype="INTEGER">
+        <descriptions defaultDescription="TweetCount"/>
+        <exceptionAggregation exceptionAggregationType="countDistinct">
+          <attribute attributeName="id"/>
+        </exceptionAggregation>
+        <formula>1</formula>
+      </measure>
+    </calculatedMeasures>
+    <restrictedMeasures/>
+    <localDimensions/>
+  </logicalModel>
+  <layout>
+    <shapes>
+      <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+        <upperLeftCorner x="50" y="140"/>
+        <rectangleSize/>
+      </shape>
+      <shape expanded="true" modelObjectName="Aggregation_1" modelObjectNameSpace="CalculationView">
+        <upperLeftCorner x="40" y="290"/>
+        <rectangleSize height="-1" width="-1"/>
+      </shape>
+      <shape expanded="true" modelObjectName="Join_1" modelObjectNameSpace="CalculationView">
+        <upperLeftCorner x="40" y="250"/>
+        <rectangleSize height="-1" width="-1"/>
+      </shape>
+    </shapes>
+  </layout>
+</Calculation:scenario>

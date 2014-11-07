@@ -1,0 +1,10 @@
+// USAGE: CALL GRANT_ACTIVATED_ROLE('DEV01.live3::Administrator','USER');
+role DEV01.live3::Administrator 
+ extends catalog role "AFL__SYS_AFL_AFLPAL_EXECUTE"
+ {
+  catalog schema "DEV01": CREATE ANY, DROP, INDEX, SELECT, INSERT, UPDATE, DELETE;
+  catalog schema "_SYS_BI": SELECT;
+  catalog schema "_SYS_BIC": SELECT;
+  application privilege: DEV01.live3::Admin;
+  application privilege: DEV01.live3::View;
+}

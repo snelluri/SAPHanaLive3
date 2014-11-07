@@ -1,0 +1,21 @@
+service namespace "DEV01.live3" {
+    "DEV01"."Tweets" as "Tweets"
+        create forbidden 
+        update forbidden 
+        delete forbidden;
+    "DEV01"."Tweeters" as "Tweeters" key ("user") 
+        create forbidden 
+        update forbidden 
+        delete forbidden;
+    "DEV01"."TweetersClustered" as "TweetersClustered" key generate local "id" 
+        create forbidden 
+        update forbidden 
+        delete forbidden;
+    "DEV01"."TweetersClusteredSummary" as "TweetersClusteredSummary" key ("ClusterNumber", "stance", "influence") 
+        create forbidden 
+        update forbidden 
+        delete forbidden;
+    "DEV01"."Settings" as "Settings"
+        create forbidden 
+        delete forbidden;
+}
