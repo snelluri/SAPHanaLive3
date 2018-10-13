@@ -5,6 +5,7 @@
 
 -- SHOW FRIENDLY ERROR MESSAGES ON DEV SERVER
 ALTER SYSTEM ALTER CONFIGURATION ('xsengine.ini', 'SYSTEM') SET ('httpserver', 'developer_mode') = 'true' WITH RECONFIGURE;
+--The above statement didn't execute on Trail. It . failed with statement that change not allowed for Tenant database.
 
 -- ENABLE XS DEBUGGING ON DEV SERVER
 ALTER SYSTEM ALTER CONFIGURATION ('xsengine.ini', 'SYSTEM') SET ('debugger', 'enabled') = 'true' WITH RECONFIGURE;
