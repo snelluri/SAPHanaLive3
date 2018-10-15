@@ -24,8 +24,10 @@ CALL GRANT_ACTIVATED_ROLE('sap.hana.xs.debugger::Debugger','DEV01');
 CALL GRANT_ACTIVATED_ROLE('sap.hana.xs.admin.roles::JobAdministrator','DEV01');
 
 -- AUTHORIZATIONS FOR LUMIRA SERVER
+/* The following are not working */
 CALL GRANT_ACTIVATED_ROLE('sap.bi.common::BI_DATA_ANALYST','DEV01');
 CALL GRANT_ACTIVATED_ROLE('sap.bi.common::BI_TECH_USER','DEV01');
+--These are working
 CALL GRANT_ACTIVATED_ROLE('sap.hana.xs.admin.roles::SQLCCAdministrator','DEV01');
 CALL GRANT_ACTIVATED_ROLE('sap.hana.xs.admin.roles::RuntimeConfAdministrator','DEV01');
 GRANT MODELING TO DEV01;
